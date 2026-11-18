@@ -1,0 +1,30 @@
+@startuml 07_publicador
+!include _estilo.iuml
+title Rol Publicador — news.view, news.publish, news.archive, news.curate
+
+actor "Usuario autenticado" as U
+actor "Publicador" as R
+R -up-|> U
+
+rectangle "Noticias" {
+  usecase "CU-12 Ver noticias internas\ne historial" as CU12
+  usecase "CU-18 Publicar noticia aprobada" as CU18
+  usecase "Programar publicación\n(fecha futura)" as SCH
+  usecase "CU-19 Archivar noticia" as CU19
+  usecase "CU-20 Curar noticia publicada\n(destacar, fijar, prioridad,\nrelevancia, vigencia, etiquetas)" as CU20
+}
+
+R --> CU12 : news.view
+R --> CU18 : news.publish
+R --> CU19 : news.archive
+R --> CU20 : news.curate
+SCH .> CU18 : <<extend>>
+
+note bottom of CU19
+  Desde cualquier estado excepto "archivada".
+end note
+note bottom of CU20
+  Fuera de borrador/rechazada solo se cambian
+  estos campos (no título ni contenido).
+end note
+@enduml

@@ -1,0 +1,61 @@
+@startuml 08_administrador
+!include _estilo.iuml
+title Rol Administrador — todos los permisos excepto permissions.manage
+
+actor "Usuario autenticado" as U
+actor "Administrador" as A
+actor "Metri-K" as MK <<sistema>>
+A -up-|> U
+
+rectangle "Noticias" {
+  usecase "CU-12..CU-20 Todo el flujo editorial\n(crear, editar, enviar, revisar, aprobar,\npublicar, archivar, curar)" as NEWS
+  usecase "CU-21 Crear categorías" as CU21
+}
+rectangle "Organización" {
+  usecase "CU-22 Sincronizar dependencias\ndesde Metri-K" as CU22
+}
+rectangle "Usuarios" {
+  usecase "CU-23 Listar y consultar usuarios\n(roles y permisos efectivos)" as CU23
+  usecase "CU-24 Crear usuario con\ncontraseña temporal" as CU24
+  usecase "CU-25 Editar datos del usuario" as CU25
+  usecase "CU-26 Fijar contraseña temporal\n(olvido)" as CU26
+  usecase "CU-27 Activar, desactivar, bloquear\ny desbloquear usuario" as CU27
+  usecase "CU-28 Vincular / desvincular\ncuenta Microsoft" as CU28
+  usecase "CU-29 Eliminar usuario (lógico)" as CU29
+  usecase "CU-30 Asignar y revocar roles\n(con alcance)" as CU30
+  usecase "CU-31 Ver y revocar sesiones\nde otros usuarios" as CU31
+}
+rectangle "Acceso y auditoría" {
+  usecase "CU-32 Consultar roles" as CU32
+  usecase "CU-33 Crear, editar y eliminar roles\ny sus permisos" as CU33
+  usecase "CU-34 Consultar permisos" as CU34
+  usecase "CU-36 Consultar auditoría y\nactividad de un usuario" as CU36
+}
+
+A --> NEWS : news.*
+A --> CU21 : news.manage_categories
+A --> CU22 : organization.sync
+CU22 --> MK
+A --> CU23 : users.view
+A --> CU24 : users.create
+A --> CU25 : users.update
+A --> CU26 : users.update
+A --> CU27 : users.update
+A --> CU28 : users.update
+A --> CU29 : users.delete
+A --> CU30 : users.manage_roles
+A --> CU31 : users.manage_sessions
+A --> CU32 : roles.view
+A --> CU33 : roles.manage
+A --> CU34 : permissions.view
+A --> CU36 : audit.view
+
+note bottom of CU30
+  Anti-escalamiento: solo asigna/revoca roles cuyos permisos
+  ya tiene en ese alcance (no puede dar Super administrador).
+end note
+note bottom of CU26
+  No aplica a su propia cuenta ni a usuarios con más permisos.
+  Cierra las sesiones del usuario, que deberá cambiarla al entrar (CU-07).
+end note
+@enduml

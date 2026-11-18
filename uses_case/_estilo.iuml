@@ -1,0 +1,19 @@
+' Estilo común de los diagramas (cada .puml lo incluye con !include _estilo.iuml)
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #F3F7F1
+  BorderColor #1F4D2B
+  ArrowColor #1F4D2B
+}
+skinparam rectangle {
+  BorderColor #1F4D2B
+  FontStyle bold
+}
+skinparam note {
+  BackgroundColor #FFF8E1
+  BorderColor #C9A227
+}

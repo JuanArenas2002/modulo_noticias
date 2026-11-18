@@ -1,0 +1,28 @@
+@startuml 10_flujo_editorial
+title Flujo editorial de una noticia — acción [permiso requerido]
+skinparam defaultFontName Arial
+skinparam shadowing false
+
+state Borrador : editable [news.update]
+state "En revisión" as EnRevision
+state Aprobada
+state Rechazada : editable [news.update]
+state Programada : pública desde start_at
+state Publicada : pública; curable [news.curate]
+state Archivada : no pública
+
+[*] --> Borrador : CU-13 crear\n[news.create]
+Borrador --> EnRevision : CU-15 enviar\n[news.submit]
+Rechazada --> EnRevision : CU-15 reenviar\n[news.submit]
+EnRevision --> Aprobada : CU-17 aprobar\n[news.approve]
+EnRevision --> Rechazada : CU-16 rechazar + motivo\n[news.review]
+Aprobada --> Publicada : CU-18 publicar\n[news.publish]
+Aprobada --> Programada : CU-18 programar\n[news.publish]
+Programada --> Publicada : al llegar start_at\n(automático)
+Borrador --> Archivada : CU-19 archivar\n[news.archive]
+EnRevision --> Archivada
+Aprobada --> Archivada
+Rechazada --> Archivada
+Programada --> Archivada
+Publicada --> Archivada
+@enduml

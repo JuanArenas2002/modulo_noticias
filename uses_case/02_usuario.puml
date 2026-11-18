@@ -1,0 +1,27 @@
+@startuml 02_usuario
+!include _estilo.iuml
+title Usuario autenticado (rol "Usuario") — sin permisos asignados
+
+actor "Visitante" as V
+actor "Usuario autenticado" as U
+U -up-|> V
+
+rectangle "Cuenta propia (no requiere permisos)" {
+  usecase "CU-07 Cambiar contraseña temporal\n(primer ingreso)" as CU07
+  usecase "CU-08 Cambiar mi contraseña" as CU08
+  usecase "CU-09 Ver mi perfil y\nmis permisos efectivos" as CU09
+  usecase "CU-10 Ver y cerrar mis sesiones" as CU10
+  usecase "CU-11 Renovar / cerrar sesión" as CU11
+}
+
+U --> CU07
+U --> CU08
+U --> CU09
+U --> CU10
+U --> CU11
+
+note bottom of U
+  Hereda los casos de uso del Visitante (CU-01..CU-05).
+  Todos los demás roles heredan de este actor.
+end note
+@enduml

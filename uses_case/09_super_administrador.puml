@@ -1,0 +1,23 @@
+@startuml 09_super_administrador
+!include _estilo.iuml
+title Rol Super administrador — todos los permisos
+
+actor "Administrador" as A
+actor "Super administrador" as S
+S -up-|> A
+
+rectangle "Acceso" {
+  usecase "CU-35 Crear y modificar el\ncatálogo de permisos" as CU35
+  usecase "Gestionar administradores y\nsuper administradores (CU-23..CU-31)" as OWN
+}
+S --> CU35 : permissions.manage
+S --> OWN
+
+note bottom of S
+  Hereda todos los casos de uso del Administrador (CU-12..CU-36).
+  El primero se crea por consola:
+  python -m app.modules.iam.presentation.cli create-admin
+  Siempre debe quedar al menos uno activo (no se puede bloquear,
+  eliminar ni quitarle el rol al último).
+end note
+@enduml

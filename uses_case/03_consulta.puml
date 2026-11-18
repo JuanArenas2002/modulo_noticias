@@ -1,0 +1,19 @@
+@startuml 03_consulta
+!include _estilo.iuml
+title Rol Consulta (viewer) — news.view
+
+actor "Usuario autenticado" as U
+actor "Consulta" as R
+R -up-|> U
+
+rectangle "Noticias" {
+  usecase "CU-12 Ver noticias internas\n(no publicadas) e historial" as CU12
+}
+R --> CU12 : news.view
+
+note right of CU12
+  Basta news.view sobre AL MENOS UNA
+  dependencia de la noticia; si no,
+  responde 404 (no revela que existe).
+end note
+@enduml

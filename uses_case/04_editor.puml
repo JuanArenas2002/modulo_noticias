@@ -1,0 +1,35 @@
+@startuml 04_editor
+!include _estilo.iuml
+title Rol Editor — news.view, news.create, news.update, news.submit
+
+actor "Usuario autenticado" as U
+actor "Editor" as R
+R -up-|> U
+
+rectangle "Noticias" {
+  usecase "CU-12 Ver noticias internas\ne historial" as CU12
+  usecase "CU-13 Crear noticia (borrador)" as CU13
+  usecase "CU-14 Editar noticia\n(borrador o rechazada)" as CU14
+  usecase "Subir imagen principal\ne imágenes del contenido" as IMG
+  usecase "Asociar dependencias,\npersonas (ORCID) y etiquetas" as REF
+  usecase "CU-15 Enviar a revisión" as CU15
+}
+
+R --> CU12 : news.view
+R --> CU13 : news.create
+R --> CU14 : news.update
+R --> CU15 : news.submit
+CU13 ..> REF : <<include>>
+CU14 ..> REF : <<include>>
+IMG .> CU14 : <<extend>>
+
+note bottom of CU13
+  El permiso se exige sobre TODAS las dependencias
+  asociadas a la noticia (institucional si el rol
+  se asignó sin alcance).
+end note
+note bottom of CU15
+  borrador -> en revisión
+  rechazada -> en revisión
+end note
+@enduml

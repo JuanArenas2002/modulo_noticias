@@ -1,0 +1,28 @@
+@startuml 05_centro_investigacion
+!include _estilo.iuml
+title Rol Centro de investigación — permisos de Editor limitados a SU centro
+
+actor "Usuario autenticado" as U
+actor "Centro de investigación\n[alcance: centro X]" as R
+R -up-|> U
+
+rectangle "Noticias del centro X" {
+  usecase "CU-12 Ver noticias internas\ndel centro e historial" as CU12
+  usecase "CU-13 Crear noticia del centro\n(borrador)" as CU13
+  usecase "CU-14 Editar noticia del centro\n(borrador o rechazada)" as CU14
+  usecase "Subir imágenes" as IMG
+  usecase "CU-15 Enviar a revisión" as CU15
+}
+
+R --> CU12 : news.view @ centro
+R --> CU13 : news.create @ centro
+R --> CU14 : news.update @ centro
+R --> CU15 : news.submit @ centro
+IMG .> CU14 : <<extend>>
+
+note bottom of R
+  Se asigna con scope_type = research_center y scope_id = id del centro.
+  No puede asociar la noticia a otras dependencias ni revisar,
+  aprobar, publicar o archivar.
+end note
+@enduml

@@ -1,0 +1,37 @@
+@startuml 01_visitante
+!include _estilo.iuml
+title Visitante (sin sesión) — no requiere permisos
+
+actor "Visitante" as V
+actor "Microsoft Entra ID" as MS <<sistema>>
+
+rectangle "Portal de noticias científicas" {
+  usecase "CU-01 Consultar noticias publicadas\n(listado, destacadas, detalle)" as CU01
+  usecase "CU-02 Consultar catálogos y\nestructura organizacional" as CU02
+  usecase "CU-03 Iniciar sesión con\ncorreo y contraseña" as CU03
+  usecase "CU-04 Iniciar sesión con Microsoft" as CU04
+  usecase "CU-05 Recuperar contraseña\npor correo" as CU05
+  usecase "CU-07 Cambiar contraseña temporal" as CU07
+}
+
+V --> CU01
+V --> CU02
+V --> CU03
+V --> CU04
+V --> CU05
+CU04 --> MS
+CU07 .> CU03 : <<extend>>\n[contraseña temporal]
+
+note right of CU01
+  Solo noticias publicadas y vigentes
+  (start_at <= ahora < end_at).
+end note
+note right of CU05
+  Depende del envío de correo. Hoy no llegan:
+  el administrador fija una contraseña temporal (CU-26).
+end note
+note bottom of CU07
+  Mientras la contraseña sea temporal, el backend
+  responde 403 en todo salvo /me, cambio de clave y logout.
+end note
+@enduml

@@ -1,0 +1,23 @@
+@startuml 06_revisor
+!include _estilo.iuml
+title Rol Revisor — news.view, news.review, news.approve
+
+actor "Usuario autenticado" as U
+actor "Revisor" as R
+R -up-|> U
+
+rectangle "Noticias" {
+  usecase "CU-12 Ver noticias internas\ne historial" as CU12
+  usecase "CU-16 Rechazar noticia\n(motivo obligatorio)" as CU16
+  usecase "CU-17 Aprobar noticia" as CU17
+}
+
+R --> CU12 : news.view
+R --> CU16 : news.review
+R --> CU17 : news.approve
+
+note bottom of CU17
+  Solo desde "en revisión". La rechazada vuelve al
+  editor para corregirla (CU-14) y reenviarla (CU-15).
+end note
+@enduml
